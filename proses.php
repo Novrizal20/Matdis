@@ -17,7 +17,7 @@ $kunciB = intval($_POST['kunci_b']);
 $metodeTerpilih = $_POST['metode'];
 $karakterDiizinkan = $_POST['karakter'];
 
-// --- LOGIKA VALIDASI KETAT (PENDEKATAN 2) ---
+// --- LOGIKA VALIDASI KETAT ---
 $inputValid = true;
 $pesanError = "";
 
@@ -42,6 +42,24 @@ if ($inputValid) {
     $plainTextKembali = $engine->dekripsi($cipherText, $kunciA, $kunciB);
     $tabelRelasi = $engine->dapatkanTabelRelasi($kunciA, $kunciB);
     $jumlahKunci = $engine->getJumlahKunci();
+
+    // --- LOGIKA HITUNG ANALISIS FREKUENSI (TUGAS KELOMPOK 3) ---
+    $analisisFrekuensi = [];
+    $totalKarakterTanpaSpasi = 0;
+    $totalKarakterMurni = strlen($cipherText);
+    
+    for ($i = 0; $i < $totalKarakterMurni; $i++) {
+        $char = $cipherText[$i];
+        if ($char !== " ") {
+            if (!isset($analisisFrekuensi[$char])) {
+                $analisisFrekuensi[$char] = 0;
+            }
+            $analisisFrekuensi[$char]++;
+            $totalKarakterTanpaSpasi++;
+        }
+    }
+    // Urutkan dari karakter yang paling sering muncul
+    arsort($analisisFrekuensi);
 }
 ?>
 
@@ -52,176 +70,174 @@ if ($inputValid) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Output Sistem Kriptografi Modular</title>
     <link rel="stylesheet" href="css/style.css">
-   <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
-}
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins',sans-serif;
+        }
 
-body{
-min-height:100vh;
-background:linear-gradient(135deg,#4f46e5,#7c3aed);
-padding:30px;
-}
+        body{
+            min-height:100vh;
+            background:linear-gradient(135deg,#4f46e5,#7c3aed);
+            padding:30px;
+        }
 
-.container{
-max-width:1100px;
-margin:auto;
-background:rgba(255,255,255,.97);
-border-radius:24px;
-padding:35px;
-box-shadow:0 20px 40px rgba(0,0,0,.15);
-}
+        .container{
+            max-width:1100px;
+            margin:auto;
+            background:rgba(255,255,255,.97);
+            border-radius:24px;
+            padding:35px;
+            box-shadow:0 20px 40px rgba(0,0,0,.15);
+        }
 
-.btn-back{
-display:inline-block;
-padding:12px 20px;
-background:#f3f4f6;
-color:#374151;
-text-decoration:none;
-border-radius:12px;
-font-weight:600;
-margin-bottom:20px;
-transition:.3s;
-}
+        .btn-back{
+            display:inline-block;
+            padding:12px 20px;
+            background:#f3f4f6;
+            color:#374151;
+            text-decoration:none;
+            border-radius:12px;
+            font-weight:600;
+            margin-bottom:20px;
+            transition:.3s;
+        }
 
-.btn-back:hover{
-background:#e5e7eb;
-}
+        .btn-back:hover{
+            background:#e5e7eb;
+        }
 
-h2{
-color:#4f46e5;
-font-size:32px;
-margin-bottom:10px;
-}
+        h2{
+            color:#4f46e5;
+            font-size:32px;
+            margin-bottom:10px;
+        }
 
-.badge-method{
-padding:8px 14px;
-border-radius:999px;
-font-size:12px;
-font-weight:600;
-color:white;
-}
+        .badge-method{
+            padding:8px 14px;
+            border-radius:999px;
+            font-size:12px;
+            font-weight:600;
+            color:white;
+        }
 
-.info-table{
-width:100%;
-border-collapse:collapse;
-margin-bottom:25px;
-overflow:hidden;
-border-radius:15px;
-}
+        .info-table{
+            width:100%;
+            border-collapse:collapse;
+            margin-bottom:25px;
+            overflow:hidden;
+            border-radius:15px;
+        }
 
-.info-table th{
-background:#4f46e5;
-color:white;
-padding:15px;
-}
+        .info-table th{
+            background:#4f46e5;
+            color:white;
+            padding:15px;
+        }
 
-.info-table td{
-padding:15px;
-border:1px solid #e5e7eb;
-}
+        .info-table td{
+            padding:15px;
+            border:1px solid #e5e7eb;
+        }
 
-.info-table tr:nth-child(even){
-background:#f8fafc;
-}
+        .info-table tr:nth-child(even){
+            background:#f8fafc;
+        }
 
-.output-section{
-background:white;
-padding:25px;
-border-radius:18px;
-margin-bottom:25px;
-box-shadow:0 5px 20px rgba(0,0,0,.05);
-}
+        .output-section{
+            background:white;
+            padding:25px;
+            border-radius:18px;
+            margin-bottom:25px;
+            box-shadow:0 5px 20px rgba(0,0,0,.05);
+        }
 
-.output-title{
-font-size:18px;
-font-weight:700;
-color:#4f46e5;
-margin-bottom:15px;
-}
+        .output-title{
+            font-size:18px;
+            font-weight:700;
+            color:#4f46e5;
+            margin-bottom:15px;
+        }
 
-.result-box{
-background:#f8fafc;
-padding:20px;
-border-left:6px solid #4f46e5;
-border-radius:12px;
-}
+        .result-box{
+            background:#f8fafc;
+            padding:20px;
+            border-left:6px solid #4f46e5;
+            border-radius:12px;
+        }
 
-.result-box code{
-display:block;
-margin-top:8px;
-padding:12px;
-background:white;
-border-radius:10px;
-font-size:18px;
-font-weight:600;
-}
+        .result-box code{
+            display:block;
+            margin-top:8px;
+            padding:12px;
+            background:white;
+            border-radius:10px;
+            font-size:18px;
+            font-weight:600;
+        }
 
-.table-relasi{
-background:linear-gradient(135deg,#4f46e5,#7c3aed);
-color:white;
-padding:20px;
-border-radius:15px;
-font-family:Consolas,monospace;
-overflow-x:auto;
-line-height:2;
-}
+        .table-relasi{
+            background:linear-gradient(135deg,#4f46e5,#7c3aed);
+            color:white;
+            padding:20px;
+            border-radius:15px;
+            font-family:Consolas,monospace;
+            overflow-x:auto;
+            line-height:2;
+        }
 
-.flowchart-box{
-background:#111827;
-color:#e5e7eb;
-padding:25px;
-border-radius:15px;
-font-family:Consolas,monospace;
-line-height:1.8;
-overflow-x:auto;
-}
+        .flowchart-box{
+            background:#111827;
+            color:#e5e7eb;
+            padding:25px;
+            border-radius:15px;
+            font-family:Consolas,monospace;
+            line-height:1.8;
+            overflow-x:auto;
+        }
 
-.highlight{
-color:#fbbf24;
-font-weight:bold;
-}
+        .highlight{
+            color:#fbbf24;
+            font-weight:bold;
+        }
 
-.error-box{
-background:#fef2f2;
-border-left:6px solid #ef4444;
-padding:20px;
-border-radius:12px;
-color:#991b1b;
-}
+        .error-box{
+            background:#fef2f2;
+            border-left:6px solid #ef4444;
+            padding:20px;
+            border-radius:12px;
+            color:#991b1b;
+        }
 
-.stats{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:15px;
-margin:25px 0;
-}
-
-.stat-card{
-background:linear-gradient(135deg,#4f46e5,#7c3aed);
-color:white;
-padding:20px;
-border-radius:16px;
-text-align:center;
-}
-
-.stat-card h3{
-font-size:30px;
-margin-top:10px;
-}
-</style>
+        /* Desain Bar Grafik Frekuensi */
+        .freq-bar-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .freq-bar {
+            height: 16px;
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            border-radius: 4px;
+            transition: width 0.5s ease-in-out;
+        }
+        .freq-percent {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4b5563;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
     <a href="index.php" class="btn-back">⬅️ Kembali (Input Parameter)</a>
     
-    <h2>🖥️ Dashboard Output Sistem</h2>
+    <h2>🖥️ Dashboard Output Sistem - Kelompok 3</h2>
     <p style="color: #718096; margin-top: 0; margin-bottom: 25px;">Status Logika Validasi: 
         <span class="badge-method" style="background-color: <?php echo $inputValid ? '#38a169' : '#e53e3e'; ?>;">
             <?php echo $inputValid ? 'VALID (PROSES DILANJUTKAN)' : 'REJECTED (PROSES DIHENTIKAN)'; ?>
@@ -264,16 +280,50 @@ margin-top:10px;
         </div>
 
         <div class="output-section">
-            <div class="output-title">3. Tabel Pemetaan Huruf (Relasi Fungsi Kongruensi)</div>
+            <div class="output-title">📊 3. Hasil Analisis Frekuensi Karakter (Kriptanalisis Statistik)</div>
+            <p style="font-size: 13px; color: #718096; margin-top: -5px; margin-bottom: 15px;">Persentase distribusi kemunculan huruf pada teks rahasia (*Ciphertext*) untuk mengukur pola statistik acak:</p>
+            
+            <table class="info-table" style="margin-bottom: 0;">
+                <tr style="background-color: #edf2f7;">
+                    <th style="width: 15%; background: #7c3aed;">Karakter</th>
+                    <th style="width: 25%; background: #7c3aed;">Frekuensi Kemunculan</th>
+                    <th style="background: #7c3aed;">Grafik Batang Distribusi Statistik</th>
+                </tr>
+                <?php 
+                if (empty($analisisFrekuensi)) {
+                    echo "<tr><td colspan='3' style='text-align:center; color:#718096;'>Tidak ada karakter teks rahasia untuk dianalisis.</td></tr>";
+                } else {
+                    foreach ($analisisFrekuensi as $char => $count): 
+                        $persen = round(($count / $totalKarakterTanpaSpasi) * 100, 1);
+                ?>
+                <tr>
+                    <td><strong style="font-size: 16px; color: #4f46e5;">'<?php echo $char; ?>'</strong></td>
+                    <td><?php echo $count; ?> kali muncul</td>
+                    <td>
+                        <div class="freq-bar-wrapper">
+                            <div class="freq-bar" style="width: <?php echo ($persen * 4); ?>px; max-width: 85%;"></div>
+                            <span class="freq-percent"><?php echo $persen; ?>%</span>
+                        </div>
+                    </td>
+                </tr>
+                <?php 
+                    endforeach; 
+                }
+                ?>
+            </table>
+        </div>
+
+        <div class="output-section">
+            <div class="output-title">4. Tabel Pemetaan Huruf (Relasi Fungsi Kongruensi)</div>
             <p style="font-size: 13px; color: #718096; margin-top: -5px; margin-bottom: 10px;">Pemetaan satu-ke-satu menggunakan fungsi kongruensi modular:</p>
-            <div class="table-relasi" style="background-color: #2b6cb0;">
+            <div class="table-relasi">
                 Asli  : <?php foreach(array_keys($tabelRelasi) as $asli) echo $asli . " "; ?><br>
                 Cipher: <?php foreach(array_values($tabelRelasi) as $cipher) echo $cipher . " "; ?>
             </div>
         </div>
 
         <div class="output-section">
-            <div class="output-title">4. Diagram Alur / Proses Aritmatika Modular</div>
+            <div class="output-title">5. Diagram Alur / Proses Aritmatika Modular + Analisis Statistik</div>
             <div class="flowchart-box">
 [START: Ambil Teks Input Kunci a & b] <br>
 &nbsp;&nbsp;&nbsp;│<br>
@@ -285,12 +335,15 @@ margin-top:10px;
 &nbsp;&nbsp;&nbsp;│<br>
 &nbsp;&nbsp;&nbsp;├──► <span class="highlight">PROSES ENKRIPSI MODULAR</span><br>
 &nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;Hitung Fungsi Posisi ➔ <span class="highlight">C = (<?php echo $kunciA; ?> × p + <?php echo $kunciB; ?>) mod <?php echo ($jumlahKunci + 1); ?></span><br>
-&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;Hasil Keluaran ➔ <strong><?php echo htmlspecialchars($cipherText); ?></strong><br>
+&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;Hasil Keluaran Teks Sandi ➔ <strong><?php echo htmlspecialchars($cipherText); ?></strong><br>
+&nbsp;&nbsp;&nbsp;│<br>
+&nbsp;&nbsp;&nbsp;├──► <span class="highlight">ANALISIS STATISTIK FREKUENSI</span><br>
+&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;Menghitung sebaran probabilitas karakter pada Ciphertext murni.<br>
 &nbsp;&nbsp;&nbsp;│<br>
 &nbsp;&nbsp;&nbsp;└──► <span class="highlight">PROSES DEKRIPSI INVERS</span><br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cari Modulo Invers (a⁻¹)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hitung Fungsi Balikan ➔ <span class="highlight">P = a⁻¹ × (c - <?php echo $kunciB; ?>) mod <?php echo ($jumlahKunci + 1); ?></span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hasil Keluaran ➔ <strong><?php echo htmlspecialchars($plainTextKembali); ?></strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hasil Keluaran Teks Asli ➔ <strong><?php echo htmlspecialchars($plainTextKembali); ?></strong><br>
 &nbsp;&nbsp;&nbsp;│<br>
 &nbsp;&nbsp;&nbsp;▼<br>
 [END: Selesai]
