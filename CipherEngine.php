@@ -3,12 +3,10 @@ class CipherEngine {
     private $alfabet;
     private $n;
 
-    // Proses 1: Tentukan himpunan karakter berdasarkan input user
     public function setHimpunanKarakter($pilihanKarakter) {
         if ($pilihanKarakter === "ALFANUMERIK") {
             $this->alfabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         } else {
-            // Hanya berisi huruf kapital A-Z (huruf kecil tidak terdaftar di sini)
             $this->alfabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         }
         $this->n = strlen($this->alfabet);
@@ -18,40 +16,52 @@ class CipherEngine {
         return $this->n - 1;
     }
 
-    // Proses 4: Enkripsi pesan (Strict: huruf kecil tidak akan diproses)
-    public function enkripsi($pesan, $kunci) {
-        $pesan = trim($pesan); 
+    // Fungsi mencari Modulo Invers (Mencari nilai a^-1 untuk dekripsi)
+    private function cariModInvers($a, $m) {
+        $a = $a % $m;
+        for ($x = 1; $x < $m; $x++) {
+            if (($a * $x) % $m == 1) {
+                return $x;
+            }
+        }
+        return 1;
+    }
+
+    // Proses 4: Enkripsi Modular Affine -> C = (a * p + b) mod n
+    public function enkripsi($pesan, $kunciA, $kunciB) {
+        $pesan = trim($pesan);
         $hasil = "";
         
         for ($i = 0; $i < strlen($pesan); $i++) {
             $karakter = $pesan[$i];
             $p = strpos($this->alfabet, $karakter);
 
-            // Logic: Hanya diproses jika karakter ada di dalam himpunan aktif
             if ($p !== false) {
-                $c = ($p + $kunci) % $this->n;
+                // Rumus Affine Modular
+                $c = ($kunciA * $p + $kunciB) % $this->n;
                 if ($c < 0) $c += $this->n;
                 $hasil .= $this->alfabet[$c];
             } else {
-                // Jika tidak ada di himpunan (seperti huruf kecil), abaikan pergeseran
                 $hasil .= $karakter; 
             }
         }
         return $hasil;
     }
 
-    // Proses 5: Dekripsi pesan kembali
-    public function dekripsi($cipher, $kunci) {
-        $cipher = trim($cipher); 
+    // Proses 5: Dekripsi Modular Affine -> P = a^-1 * (c - b) mod n
+    public function dekripsi($cipher, $kunciA, $kunciB) {
+        $cipher = trim($cipher);
         $hasil = "";
+        $aInvers = $this->cariModInvers($kunciA, $this->n);
         
         for ($i = 0; $i < strlen($cipher); $i++) {
             $karakter = $cipher[$i];
             $c = strpos($this->alfabet, $karakter);
 
             if ($c !== false) {
-                $p = ($c - $kunci) % $this->n;
-                if ($p < 0) $p += $this->n;
+                // Rumus Invers Affine Modular
+                $p = ($aInvers * ($c - $kunciB)) % $this->n;
+                while ($p < 0) $p += $this->n;
                 $hasil .= $this->alfabet[$p];
             } else {
                 $hasil .= $karakter;
@@ -60,10 +70,10 @@ class CipherEngine {
         return $hasil;
     }
 
-    public function dapatkanTabelRelasi($kunci) {
+    public function dapatkanTabelRelasi($kunciA, $kunciB) {
         $pemetaan = [];
         for ($i = 0; $i < $this->n; $i++) {
-            $c = ($i + $kunci) % $this->n;
+            $c = ($kunciA * $i + $kunciB) % $this->n;
             if ($c < 0) $c += $this->n;
             $pemetaan[$this->alfabet[$i]] = $this->alfabet[$c];
         }
