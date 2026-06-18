@@ -52,17 +52,169 @@ if ($inputValid) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Output Sistem Kriptografi Modular</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        .output-section { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .output-title { font-size: 16px; font-weight: bold; color: #2d3748; margin-top: 0; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #edf2f7; }
-        .badge-method { background: #2b6cb0; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-        .flowchart-box { background: #1a202c; color: #a0aec0; padding: 15px; font-family: 'Courier New', Courier, monospace; font-size: 13px; border-radius: 6px; line-height: 1.5; overflow-x: auto; }
-        .flowchart-box .highlight { color: #f6e05e; }
-        .info-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px; }
-        .info-table th, .info-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        .info-table th { background-color: #f8f9fa; }
-        .error-box { background-color: #fff5f5; border-left: 5px solid #e53e3e; color: #c53030; padding: 20px; border-radius: 6px; margin-bottom: 20px; }
-    </style>
+   <style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+min-height:100vh;
+background:linear-gradient(135deg,#4f46e5,#7c3aed);
+padding:30px;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+background:rgba(255,255,255,.97);
+border-radius:24px;
+padding:35px;
+box-shadow:0 20px 40px rgba(0,0,0,.15);
+}
+
+.btn-back{
+display:inline-block;
+padding:12px 20px;
+background:#f3f4f6;
+color:#374151;
+text-decoration:none;
+border-radius:12px;
+font-weight:600;
+margin-bottom:20px;
+transition:.3s;
+}
+
+.btn-back:hover{
+background:#e5e7eb;
+}
+
+h2{
+color:#4f46e5;
+font-size:32px;
+margin-bottom:10px;
+}
+
+.badge-method{
+padding:8px 14px;
+border-radius:999px;
+font-size:12px;
+font-weight:600;
+color:white;
+}
+
+.info-table{
+width:100%;
+border-collapse:collapse;
+margin-bottom:25px;
+overflow:hidden;
+border-radius:15px;
+}
+
+.info-table th{
+background:#4f46e5;
+color:white;
+padding:15px;
+}
+
+.info-table td{
+padding:15px;
+border:1px solid #e5e7eb;
+}
+
+.info-table tr:nth-child(even){
+background:#f8fafc;
+}
+
+.output-section{
+background:white;
+padding:25px;
+border-radius:18px;
+margin-bottom:25px;
+box-shadow:0 5px 20px rgba(0,0,0,.05);
+}
+
+.output-title{
+font-size:18px;
+font-weight:700;
+color:#4f46e5;
+margin-bottom:15px;
+}
+
+.result-box{
+background:#f8fafc;
+padding:20px;
+border-left:6px solid #4f46e5;
+border-radius:12px;
+}
+
+.result-box code{
+display:block;
+margin-top:8px;
+padding:12px;
+background:white;
+border-radius:10px;
+font-size:18px;
+font-weight:600;
+}
+
+.table-relasi{
+background:linear-gradient(135deg,#4f46e5,#7c3aed);
+color:white;
+padding:20px;
+border-radius:15px;
+font-family:Consolas,monospace;
+overflow-x:auto;
+line-height:2;
+}
+
+.flowchart-box{
+background:#111827;
+color:#e5e7eb;
+padding:25px;
+border-radius:15px;
+font-family:Consolas,monospace;
+line-height:1.8;
+overflow-x:auto;
+}
+
+.highlight{
+color:#fbbf24;
+font-weight:bold;
+}
+
+.error-box{
+background:#fef2f2;
+border-left:6px solid #ef4444;
+padding:20px;
+border-radius:12px;
+color:#991b1b;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin:25px 0;
+}
+
+.stat-card{
+background:linear-gradient(135deg,#4f46e5,#7c3aed);
+color:white;
+padding:20px;
+border-radius:16px;
+text-align:center;
+}
+
+.stat-card h3{
+font-size:30px;
+margin-top:10px;
+}
+</style>
 </head>
 <body>
 
