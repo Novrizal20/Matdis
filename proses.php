@@ -10,22 +10,25 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit();
 }
 
-$pesanAsli = $_POST['pesan'];
+// AMBIL DATA MURNI (Tanpa paksaan strtoupper agar huruf kecil tetap terbaca kecil)
+$pesanAsli = $_POST['pesan']; 
 $kunciA = intval($_POST['kunci_a']);
 $kunciB = intval($_POST['kunci_b']);
 $metodeTerpilih = $_POST['metode'];
 $karakterDiizinkan = $_POST['karakter'];
 
-// --- LOGIKA VALIDASI SEMESTA ---
+// --- LOGIKA VALIDASI SEMESTA KETAT ---
 $inputValid = true;
 $pesanError = "";
 
 if ($karakterDiizinkan === "HURUF") {
+    // Validasi: Wajib Huruf Kapital A-Z dan Spasi saja
     if (!preg_match('/^[A-Z\s]+$/', $pesanAsli)) {
         $inputValid = false;
-        $pesanError = "Input ditolak! Kriteria semesta adalah <strong>'Hanya Huruf Kapital (A-Z)'</strong>. Teks input kamu kedapatan mengandung huruf kecil, angka, atau simbol.";
+        $pesanError = "Input ditolak! Kriteria semesta adalah <strong>'Hanya Huruf Kapital (A-Z)'</strong>. Teks input kamu kedapatan mengandung huruf kecil, angka, atau simbol ilegal.";
     }
 } else if ($karakterDiizinkan === "ALFANUMERIK") {
+    // Validasi: Wajib Huruf Kapital A-Z, Angka 0-9, dan Spasi saja
     if (!preg_match('/^[A-Z0-9\s]+$/', $pesanAsli)) {
         $inputValid = false;
         $pesanError = "Input ditolak! Kriteria semesta adalah <strong>'Alfanumerik'</strong>. Teks input kamu kedapatan mengandung huruf kecil atau simbol ilegal.";
@@ -108,9 +111,14 @@ if ($inputValid) {
 
     <?php if (!$inputValid): ?>
         <div class="error-box">
-            <h3 style="margin-top: 0; color: #9b2c2c; border: none; padding: 0;">🛑 Gagal Memproses Data!</h3>
+            <h3 style="margin-top: 0; color: #9b2c2c; border: none; padding: 0; margin-bottom: 10px;">🛑 Gagal Memproses Data!</h3>
             <p><?php echo $pesanError; ?></p>
-            <p style="font-size: 13px; margin-bottom: 0; font-style: italic;">Sistem menolak memproses karena karakter input berada di luar batasan Domain Himpunan Semesta.</p>
+            <div style="background: white; border-radius: 8px; padding: 15px; margin: 15px 0; border: 1px solid #fca5a5;">
+                <p style="margin: 0; font-size: 14px; color: #4b5563;">
+                    Teks input asli yang kamu masukkan: <strong style="font-size: 16px; color: #ef4444; font-family: monospace;"><?php echo htmlspecialchars($pesanAsli); ?></strong>
+                </p>
+            </div>
+            <p style="font-size: 13px; margin-bottom: 0; font-style: italic;">Sistem menolak memproses kalkulasi modular karena karakter input berada di luar batasan Domain Himpunan Semesta.</p>
         </div>
 
     <?php else: ?>
