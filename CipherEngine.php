@@ -16,18 +16,18 @@ class CipherEngine {
         return $this->n - 1;
     }
 
-    // Fungsi mencari Modulo Invers (Mencari nilai a^-1 untuk dekripsi)
+    // Fungsi invers modular dinamis (mendukung n=26 dan n=36)
     private function cariModInvers($a, $m) {
-        $a = $a % $m;
+        $a = (($a % $m) + $m) % $m;
         for ($x = 1; $x < $m; $x++) {
-            if (($a * $x) % $m == 1) {
+            if ((($a * $x) % $m) == 1) {
                 return $x;
             }
         }
-        return 1;
+        return 1; 
     }
 
-    // Proses 4: Enkripsi Modular Affine -> C = (a * p + b) mod n
+    // Fungsi Enkripsi: C = (a * p + b) mod n
     public function enkripsi($pesan, $kunciA, $kunciB) {
         $pesan = trim($pesan);
         $hasil = "";
@@ -37,7 +37,6 @@ class CipherEngine {
             $p = strpos($this->alfabet, $karakter);
 
             if ($p !== false) {
-                // Rumus Affine Modular
                 $c = ($kunciA * $p + $kunciB) % $this->n;
                 if ($c < 0) $c += $this->n;
                 $hasil .= $this->alfabet[$c];
@@ -48,7 +47,7 @@ class CipherEngine {
         return $hasil;
     }
 
-    // Proses 5: Dekripsi Modular Affine -> P = a^-1 * (c - b) mod n
+    // Fungsi Dekripsi: P = a^-1 * (c - b) mod n
     public function dekripsi($cipher, $kunciA, $kunciB) {
         $cipher = trim($cipher);
         $hasil = "";
@@ -59,7 +58,6 @@ class CipherEngine {
             $c = strpos($this->alfabet, $karakter);
 
             if ($c !== false) {
-                // Rumus Invers Affine Modular
                 $p = ($aInvers * ($c - $kunciB)) % $this->n;
                 while ($p < 0) $p += $this->n;
                 $hasil .= $this->alfabet[$p];

@@ -1,5 +1,4 @@
 <?php
-// Mengaktifkan pelacak error penuh agar jika ada kendala langsung kelihatan di browser
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -17,7 +16,7 @@ $kunciB = intval($_POST['kunci_b']);
 $metodeTerpilih = $_POST['metode'];
 $karakterDiizinkan = $_POST['karakter'];
 
-// --- LOGIKA VALIDASI KETAT ---
+// --- LOGIKA VALIDASI SEMESTA ---
 $inputValid = true;
 $pesanError = "";
 
@@ -37,13 +36,12 @@ if ($inputValid) {
     $engine = new CipherEngine();
     $engine->setHimpunanKarakter($karakterDiizinkan);
 
-    // Proses Eksekusi Inti Aritmatika Modular Affine
     $cipherText = $engine->enkripsi($pesanAsli, $kunciA, $kunciB);
     $plainTextKembali = $engine->dekripsi($cipherText, $kunciA, $kunciB);
     $tabelRelasi = $engine->dapatkanTabelRelasi($kunciA, $kunciB);
     $jumlahKunci = $engine->getJumlahKunci();
 
-    // --- LOGIKA HITUNG ANALISIS FREKUENSI (TUGAS KELOMPOK 3) ---
+    // --- HITUNG ANALISIS FREKUENSI ---
     $analisisFrekuensi = [];
     $totalKarakterTanpaSpasi = 0;
     $totalKarakterMurni = strlen($cipherText);
@@ -58,7 +56,6 @@ if ($inputValid) {
             $totalKarakterTanpaSpasi++;
         }
     }
-    // Urutkan dari karakter yang paling sering muncul
     arsort($analisisFrekuensi);
 }
 ?>
@@ -73,163 +70,28 @@ if ($inputValid) {
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:'Poppins',sans-serif;
-        }
-
-        body{
-            min-height:100vh;
-            background:linear-gradient(135deg,#4f46e5,#7c3aed);
-            padding:30px;
-        }
-
-        .container{
-            max-width:1100px;
-            margin:auto;
-            background:rgba(255,255,255,.97);
-            border-radius:24px;
-            padding:35px;
-            box-shadow:0 20px 40px rgba(0,0,0,.15);
-        }
-
-        .btn-back{
-            display:inline-block;
-            padding:12px 20px;
-            background:#f3f4f6;
-            color:#374151;
-            text-decoration:none;
-            border-radius:12px;
-            font-weight:600;
-            margin-bottom:20px;
-            transition:.3s;
-        }
-
-        .btn-back:hover{
-            background:#e5e7eb;
-        }
-
-        h2{
-            color:#4f46e5;
-            font-size:32px;
-            margin-bottom:10px;
-        }
-
-        .badge-method{
-            padding:8px 14px;
-            border-radius:999px;
-            font-size:12px;
-            font-weight:600;
-            color:white;
-        }
-
-        .info-table{
-            width:100%;
-            border-collapse:collapse;
-            margin-bottom:25px;
-            overflow:hidden;
-            border-radius:15px;
-        }
-
-        .info-table th{
-            background:#4f46e5;
-            color:white;
-            padding:15px;
-        }
-
-        .info-table td{
-            padding:15px;
-            border:1px solid #e5e7eb;
-        }
-
-        .info-table tr:nth-child(even){
-            background:#f8fafc;
-        }
-
-        .output-section{
-            background:white;
-            padding:25px;
-            border-radius:18px;
-            margin-bottom:25px;
-            box-shadow:0 5px 20px rgba(0,0,0,.05);
-        }
-
-        .output-title{
-            font-size:18px;
-            font-weight:700;
-            color:#4f46e5;
-            margin-bottom:15px;
-        }
-
-        .result-box{
-            background:#f8fafc;
-            padding:20px;
-            border-left:6px solid #4f46e5;
-            border-radius:12px;
-        }
-
-        .result-box code{
-            display:block;
-            margin-top:8px;
-            padding:12px;
-            background:white;
-            border-radius:10px;
-            font-size:18px;
-            font-weight:600;
-        }
-
-        .table-relasi{
-            background:linear-gradient(135deg,#4f46e5,#7c3aed);
-            color:white;
-            padding:20px;
-            border-radius:15px;
-            font-family:Consolas,monospace;
-            overflow-x:auto;
-            line-height:2;
-        }
-
-        .flowchart-box{
-            background:#111827;
-            color:#e5e7eb;
-            padding:25px;
-            border-radius:15px;
-            font-family:Consolas,monospace;
-            line-height:1.8;
-            overflow-x:auto;
-        }
-
-        .highlight{
-            color:#fbbf24;
-            font-weight:bold;
-        }
-
-        .error-box{
-            background:#fef2f2;
-            border-left:6px solid #ef4444;
-            padding:20px;
-            border-radius:12px;
-            color:#991b1b;
-        }
-
-        /* Desain Bar Grafik Frekuensi */
-        .freq-bar-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .freq-bar {
-            height: 16px;
-            background: linear-gradient(90deg, #4f46e5, #7c3aed);
-            border-radius: 4px;
-            transition: width 0.5s ease-in-out;
-        }
-        .freq-percent {
-            font-size: 13px;
-            font-weight: 600;
-            color: #4b5563;
-        }
+        *{ margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+        body{ min-height:100vh; background:linear-gradient(135deg,#4f46e5,#7c3aed); padding:30px; }
+        .container{ max-width:1100px; margin:auto; background:rgba(255,255,255,.97); border-radius:24px; padding:35px; box-shadow:0 20px 40px rgba(0,0,0,.15); }
+        .btn-back{ display:inline-block; padding:12px 20px; background:#f3f4f6; color:#374151; text-decoration:none; border-radius:12px; font-weight:600; margin-bottom:20px; transition:.3s; }
+        .btn-back:hover{ background:#e5e7eb; }
+        h2{ color:#4f46e5; font-size:32px; margin-bottom:10px; }
+        .badge-method{ padding:8px 14px; border-radius:999px; font-size:12px; font-weight:600; color:white; }
+        .info-table{ width:100%; border-collapse:collapse; margin-bottom:25px; overflow:hidden; border-radius:15px; }
+        .info-table th{ background:#4f46e5; color:white; padding:15px; }
+        .info-table td{ padding:15px; border:1px solid #e5e7eb; }
+        .info-table tr:nth-child(even){ background:#f8fafc; }
+        .output-section{ background:white; padding:25px; border-radius:18px; margin-bottom:25px; box-shadow:0 5px 20px rgba(0,0,0,.05); }
+        .output-title{ font-size:18px; font-weight:700; color:#4f46e5; margin-bottom:15px; }
+        .result-box{ background:#f8fafc; padding:20px; border-left:6px solid #4f46e5; border-radius:12px; }
+        .result-box code{ display:block; margin-top:8px; padding:12px; background:white; border-radius:10px; font-size:18px; font-weight:600; }
+        .table-relasi{ background:linear-gradient(135deg,#4f46e5,#7c3aed); color:white; padding:20px; border-radius:15px; font-family:Consolas,monospace; overflow-x:auto; line-height:2; }
+        .flowchart-box{ background:#111827; color:#e5e7eb; padding:25px; border-radius:15px; font-family:Consolas,monospace; line-height:1.8; overflow-x:auto; }
+        .highlight{ color:#fbbf24; font-weight:bold; }
+        .error-box{ background:#fef2f2; border-left:6px solid #ef4444; padding:20px; border-radius:12px; color:#991b1b; }
+        .freq-bar-wrapper { display: flex; align-items: center; gap: 10px; }
+        .freq-bar { height: 16px; background: linear-gradient(90deg, #4f46e5, #7c3aed); border-radius: 4px; transition: width 0.5s ease-in-out; }
+        .freq-percent { font-size: 13px; font-weight: 600; color: #4b5563; }
     </style>
 </head>
 <body>
@@ -291,7 +153,7 @@ if ($inputValid) {
                 </tr>
                 <?php 
                 if (empty($analisisFrekuensi)) {
-                    echo "<tr><td colspan='3' style='text-align:center; color:#718096;'>Tidak ada karakter teks rahasia untuk dianalisis.</td></tr>";
+                    echo "<tr><td colspan='3' style='text-align:center; color:#718096;'>Tidak ada karakter.</td></tr>";
                 } else {
                     foreach ($analisisFrekuensi as $char => $count): 
                         $persen = round(($count / $totalKarakterTanpaSpasi) * 100, 1);
