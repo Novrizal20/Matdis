@@ -102,7 +102,7 @@ if ($inputValid) {
 <div class="container">
     <a href="index.php" class="btn-back">⬅️ Kembali (Input Parameter)</a>
     
-    <h2>🖥️ Dashboard Output Sistem - Kelompok 3</h2>
+    <h2>🖥️ Dashboard Output Sistem - Kelompok 4</h2>
     <p style="color: #718096; margin-top: 0; margin-bottom: 25px;">Status Logika Validasi: 
         <span class="badge-method" style="background-color: <?php echo $inputValid ? '#38a169' : '#e53e3e'; ?>;">
             <?php echo $inputValid ? 'VALID (PROSES DILANJUTKAN)' : 'REJECTED (PROSES DIHENTIKAN)'; ?>
