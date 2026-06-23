@@ -1,5 +1,8 @@
 {
+  "functions": {
+    "projek/*.php": { "runtime": "vercel-php@0.7.1" }
+  },
   "routes": [
-    { "src": "/(.*)", "dest": "/projek/index.php" }
+    { "src": "/(.*)", "dest": "/projek/$1" }
   ]
 }
